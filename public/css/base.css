@@ -39,6 +39,10 @@ h3 { font-size: 1.05rem; line-height: 1.25; }
 
 p { margin: 0; }
 [hidden] { display: none !important; }
+
+/* Al arrastrar el mouse no se pinta de azul el texto de la pantalla, solo se puede seleccionar donde se escribe (campos y mensajes) */
+html, body { -webkit-user-select: none; user-select: none; }
+input, textarea, ion-input, ion-input *, ion-textarea, ion-textarea *, ion-searchbar, ion-searchbar * { -webkit-user-select: text; user-select: text; }
 a { color: var(--petrol); text-decoration: none; font-weight: 600; }
 a:hover { text-decoration: underline; }
 
