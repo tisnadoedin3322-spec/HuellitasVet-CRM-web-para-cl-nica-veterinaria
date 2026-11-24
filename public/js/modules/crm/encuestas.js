@@ -73,6 +73,7 @@ export async function render(root) {
     const url = String(root.querySelector('#url').value || '').trim();
     if (!/^https?:\/\/\S+$/.test(url)) return toast('Ingresa un enlace válido que empiece con https://', 'danger');
     await saveSettings({ googleReviewUrl: url });
+    cfg.googleReviewUrl = url; // las invitaciones de esta pantalla ya usan el enlace recién guardado, sin recargar
     toast('Enlace guardado', 'success');
   });
 
