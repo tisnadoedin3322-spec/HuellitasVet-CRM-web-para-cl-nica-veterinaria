@@ -64,6 +64,12 @@
               </svg>
               <span>Respaldo de datos</span>
             </button>
+            <button type="button" id="qr-btn" class="side-btn" hidden>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3"/><path d="M21 14v.01"/><path d="M14 21h3"/><path d="M21 17v4"/>
+              </svg>
+              <span>QR de registro de clientes</span>
+            </button>
             <button type="button" id="reset-demo" class="side-btn">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/>
@@ -89,5 +95,14 @@
       </div>
     </ion-split-pane>
   </ion-app>
+
+  <!-- QR de registro: ocupa el espacio libre bajo el menú (qr.js lo muestra solo si cabe y hay nube) -->
+  <aside id="qr-dock" class="qr-dock" aria-label="Registro de clientes por QR" hidden>
+    <div class="qr-card">
+      <button type="button" class="qr-thumb" data-qr-open aria-label="Agrandar el código QR"><img alt="Código QR para el registro de clientes" width="88" height="88"></button>
+      <div class="qr-text"><strong>Registro por QR</strong><span>Tus clientes se registran desde su celular</span></div>
+      <button type="button" class="qr-open" data-qr-open>Agrandar y compartir</button>
+    </div>
+  </aside>
 </body>
 </html>

@@ -1,4 +1,6 @@
 import { uid } from './utils.js';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js';
+import { createSupabaseAdapter } from './supabase.js';
 
 export const COLLECTIONS = [
   'owners',
@@ -46,6 +48,9 @@ const localAdapter = {
   },
   async get(col, id) {
     return copy(table(col).find((r) => r.id === id)) ?? null;
+  },
+  async buscar(col, filtros = {}) {
+    return copy(table(col).filter((r) => Object.entries(filtros).every(([k, v]) => r[k] === v)));
   },
   async insert(col, rec) {
     const row = { id: uid(), createdAt: new Date().toISOString(), ...rec };
@@ -101,7 +106,27 @@ const localAdapter = {
   },
 };
 
-export const db = localAdapter;
+// Con la URL y la clave de config.js la app usa Supabase; sin ellas, guarda en este navegador
+export const enNube = Boolean(SUPABASE_URL && SUPABASE_KEY);
+export const db = enNube ? createSupabaseAdapter(SUPABASE_URL, SUPABASE_KEY) : localAdapter;
+
+// Base en memoria: la carga de datos de ejemplo arma todo aquí y luego lo guarda de una sola vez (db.importAll)
+export function memoriaDb() {
+  const data = Object.fromEntries(COLLECTIONS.map((c) => [c, []]));
+  return {
+    data,
+    async insert(col, rec) {
+      const row = { id: uid(), createdAt: new Date().toISOString(), ...rec };
+      data[col].push(row);
+      return copy(row);
+    },
+    async update(col, id, patch) {
+      const row = data[col].find((r) => r.id === id);
+      Object.assign(row, patch, { updatedAt: new Date().toISOString() });
+      return copy(row);
+    },
+  };
+}
 
 export async function loadAll(...cols) {
   const names = cols.length ? cols : COLLECTIONS;

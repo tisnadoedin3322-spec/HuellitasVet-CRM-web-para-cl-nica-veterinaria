@@ -1,4 +1,4 @@
-import { db, COLLECTIONS } from './store.js';
+import { db, COLLECTIONS, enNube } from './store.js';
 import { fmtDate, todayISO } from './utils.js';
 import { openModal, confirmDialog, toast, icon } from './ui.js';
 
@@ -16,6 +16,7 @@ export function openBackupModal() {
     title: 'Respaldo de datos',
     size: 'sm',
     html: `<p class="muted">Guarda una copia de todos los datos de la clínica en un archivo, úsala antes de borrar el historial del navegador o para pasar todo a otra computadora</p>
+      <p class="muted"><strong>Dónde están tus datos ahora:</strong> ${enNube ? 'en la nube (Supabase)' : 'solo en este navegador'}</p>
       <input type="file" id="bk-file" accept=".json,application/json" hidden>`,
     footer: `<ion-button fill="outline" id="bk-up">${icon('upload')}Restaurar desde un archivo</ion-button>
       <ion-button id="bk-down">${icon('download')}Descargar respaldo</ion-button>`,

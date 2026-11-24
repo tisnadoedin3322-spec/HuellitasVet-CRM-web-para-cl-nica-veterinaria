@@ -41,6 +41,8 @@ setTimeout(closeSplash, 10000); // por si algo falla al cargar, que no se quede 
 const usuario = (() => { try { return localStorage.getItem('vetara.usuario') || ''; } catch { return ''; } })();
 document.getElementById('user-name').textContent = usuario || 'Invitado';
 document.getElementById('backup').addEventListener('click', openBackupModal);
+// El QR de registro va aparte: si algo falla al cargarlo, el resto de la app sigue funcionando igual
+import('./core/qr.js').then((m) => m.iniciarQr()).catch((err) => console.error('QR de registro no disponible', err));
 document.getElementById('logout').addEventListener('click', () => {
   try { localStorage.removeItem('vetara.usuario'); } catch {}
   location.href = '/login.html';
@@ -86,6 +88,14 @@ else resetBtn.addEventListener('click', async () => {
 
 window.addEventListener('hashchange', route);
 
-await ensureSeed();
+// Si algo falla al guardar (por ejemplo sin internet en modo nube), se avisa en vez de quedarse callado
+window.addEventListener('unhandledrejection', (e) => toast(e.reason?.message || 'Ocurrió un error inesperado', 'danger'));
+
+// Si la nube no responde, igual se abre la pantalla: ahí aparece el motivo y qué revisar
+try {
+  await ensureSeed();
+} catch (err) {
+  console.error(err);
+}
 if (!location.hash) location.hash = '#/clientes';
 else route();

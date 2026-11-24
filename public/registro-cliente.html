@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0a2c36">
+  <link rel="icon" type="image/png" href="/css/img/iconweb.png">
+  <title>HuellitasVet · Registro de clientes</title>
+
+  <link rel="preload" href="/fonts/oswald/oswald-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/fonts/oswald/font.css">
+  <link rel="preload" href="/fonts/playwrite-be-vlg/playwrite-be-vlg.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/fonts/playwrite-be-vlg/font.css">
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/registro-cliente.css">
+</head>
+<body>
+  <main class="rc">
+    <img class="rc-logo" src="/css/img/iconweb-256.png" alt="" width="80" height="80">
+    <h1>HuellitasVet</h1>
+    <p class="rc-sub">Registra a tu mascota y tus datos, así te atendemos más rápido en la clínica</p>
+
+    <form id="form" novalidate>
+      <h2 class="rc-group">Tus datos</h2>
+      <div class="rc-field">
+        <label for="ownerNombre">Nombre completo *</label>
+        <input id="ownerNombre" name="ownerNombre" type="text" data-mask="name" maxlength="60" autocomplete="name" autocapitalize="words">
+        <p class="rc-err" data-err="ownerNombre" role="alert"></p>
+      </div>
+      <div class="rc-field">
+        <label for="celular">Celular *</label>
+        <input id="celular" name="celular" type="text" data-mask="phone" maxlength="9" inputmode="numeric" autocomplete="tel-national" placeholder="9XXXXXXXX">
+        <p class="rc-err" data-err="celular" role="alert"></p>
+      </div>
+      <div class="rc-field">
+        <label for="correo">Correo electrónico (opcional)</label>
+        <input id="correo" name="correo" type="text" data-mask="email" maxlength="80" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false">
+        <p class="rc-err" data-err="correo" role="alert"></p>
+      </div>
+
+      <h2 class="rc-group">Tu mascota</h2>
+      <div class="rc-field">
+        <label for="mascota">Nombre de la mascota *</label>
+        <input id="mascota" name="mascota" type="text" data-mask="name" maxlength="40" autocapitalize="words">
+        <p class="rc-err" data-err="mascota" role="alert"></p>
+      </div>
+      <div class="rc-two">
+        <div class="rc-field">
+          <label for="especie">Especie *</label>
+          <select id="especie" name="especie">
+            <option value="">Elige</option>
+            <option>Perro</option><option>Gato</option><option>Conejo</option><option>Ave</option><option>Otro</option>
+          </select>
+          <p class="rc-err" data-err="especie" role="alert"></p>
+        </div>
+        <div class="rc-field">
+          <label for="sexo">Sexo *</label>
+          <select id="sexo" name="sexo">
+            <option value="">Elige</option>
+            <option>Macho</option><option>Hembra</option>
+          </select>
+          <p class="rc-err" data-err="sexo" role="alert"></p>
+        </div>
+      </div>
+      <div class="rc-field">
+        <label for="raza">Raza *</label>
+        <input id="raza" name="raza" type="text" data-mask="name" maxlength="40" autocapitalize="words" placeholder="Si no la sabes, escribe Mestizo">
+        <p class="rc-err" data-err="raza" role="alert"></p>
+      </div>
+      <div class="rc-two">
+        <div class="rc-field">
+          <label for="edadAnios">Edad (años) *</label>
+          <input id="edadAnios" name="edadAnios" type="text" data-mask="int" data-max="30" maxlength="2" inputmode="numeric" placeholder="0 a 30">
+          <p class="rc-err" data-err="edadAnios" role="alert"></p>
+        </div>
+        <div class="rc-field">
+          <label for="edadMeses">Meses adicionales</label>
+          <input id="edadMeses" name="edadMeses" type="text" data-mask="int" data-max="11" maxlength="2" inputmode="numeric" placeholder="0 a 11">
+          <p class="rc-err" data-err="edadMeses" role="alert"></p>
+        </div>
+      </div>
+
+      <div class="rc-field rc-consent">
+        <label class="rc-check">
+          <input type="checkbox" name="acepto">
+          <span>Acepto que la clínica guarde estos datos para contactarme sobre la atención de mi mascota</span>
+        </label>
+        <p class="rc-err" data-err="acepto" role="alert"></p>
+      </div>
+
+      <!-- Trampa para robots: una persona no la ve ni la llena -->
+      <input class="rc-trap" type="text" name="web" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+      <p class="rc-err rc-err-main" id="error" role="alert"></p>
+      <button type="submit" id="enviar" class="rc-btn">Registrar</button>
+    </form>
+
+    <section id="listo" class="rc-done" hidden>
+      <span class="rc-done-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+      </span>
+      <h2>¡Listo, quedaste registrado!</h2>
+      <p id="listo-texto"></p>
+      <button type="button" id="otra" class="rc-btn rc-btn-out">Registrar otra mascota</button>
+    </section>
+
+    <section id="sin-nube" class="rc-done" hidden>
+      <h2>Este registro aún no está disponible</h2>
+      <p>La clínica todavía no lo activó, avísale a recepción y te registran allá</p>
+    </section>
+  </main>
+
+  <script type="module" src="/js/registro-cliente.js"></script>
+</body>
+</html>

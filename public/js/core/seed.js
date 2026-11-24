@@ -1,23 +1,22 @@
-import { db } from './store.js';
+import { db, memoriaDb } from './store.js';
 import { servicioDe, categoriaVentaProducto, COMPROBANTES } from './domain.js';
 import { addDays, todayISO, round2 } from './utils.js';
 
 export async function ensureSeed() {
-  if (db.isSeeded()) return;
+  if (await db.isSeeded()) return;
   await seed();
-  db.markSeeded();
 }
 
+// importAll reemplaza todo lo que hubiera, por eso no hace falta borrar antes
 export async function resetDemo() {
-  await db.clearAll();
   await seed();
-  db.markSeeded();
 }
 
 async function seed() {
   const T = todayISO();
   const d = (n) => addDays(T, -n);
-  const ins = (col, rec) => db.insert(col, rec);
+  const mem = memoriaDb();
+  const ins = (col, rec) => mem.insert(col, rec);
 
   const staff = [];
   for (const s of [
@@ -260,7 +259,7 @@ async function seed() {
       comprobante: `${cfg.prefijo}-${String(count).padStart(cfg.ancho, '0')}`,
       fechaVence: credito ? credito.vence : null,
     });
-    for (const { rec } of list) await db.update('services', rec.id, { saleId: sale.id });
+    for (const { rec } of list) await mem.update('services', rec.id, { saleId: sale.id });
     n++;
   }
 
@@ -348,4 +347,6 @@ async function seed() {
   await ins('encuestas', { serviceId: encuestaSvc.id, petId: P.Max.id, ownerId: owners[0].id, fecha: d(118), calificacion: 5, comentario: 'Muy buena atención y explicaron todo con calma.', resultado: 'Invitado a reseña de Google' });
   const enc2 = await ins('encuestas', { serviceId: encuestaLuna.id, petId: P.Pelusa.id, ownerId: owners[11].id, fecha: d(9), calificacion: 2, comentario: 'Esperamos más de una hora para ser atendidos.', resultado: 'Derivado a Reclamos' });
   await ins('reclamos', { encuestaId: enc2.id, petId: P.Pelusa.id, ownerId: owners[11].id, fecha: d(9), calificacion: 2, comentario: 'Esperamos más de una hora para ser atendidos.', estado: 'En proceso' });
+
+  await db.importAll(mem.data);
 }

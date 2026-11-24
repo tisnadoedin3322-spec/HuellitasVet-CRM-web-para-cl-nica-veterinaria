@@ -16,6 +16,9 @@ export const SERVICIOS = [
 
 export const servicioDe = (tipo) => SERVICIOS.find((s) => s.tipo === tipo);
 
+// Canal con el que queda anotado en la bitácora quien se registró escaneando el QR
+export const CANAL_QR = 'Registro QR';
+
 export const CATEGORIAS_PRODUCTO = ['Medicamentos', 'Alimento', 'Higiene', 'Accesorios', 'Insumos'];
 export const categoriaVentaProducto = (cat) => (cat === 'Medicamentos' ? 'Farmacia' : 'Pet shop');
 

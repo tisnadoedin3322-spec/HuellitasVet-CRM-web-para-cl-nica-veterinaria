@@ -19,8 +19,12 @@ export const round2 = (n) => Math.round((n + Number.EPSILON) * 100) / 100;
 export const money = (n) =>
   'S/ ' + Number(n || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+// randomUUID solo existe con https (o localhost): con http se arma un UUID válido igual, la nube exige ese formato
 export const uid = () =>
-  globalThis.crypto?.randomUUID?.() ?? 'id-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+  globalThis.crypto?.randomUUID?.() ??
+  '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, (c) =>
+    (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16),
+  );
 
 const pad = (n) => String(n).padStart(2, '0');
 export const toISO = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;

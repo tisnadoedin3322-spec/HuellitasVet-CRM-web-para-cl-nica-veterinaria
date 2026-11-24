@@ -1,21 +1,27 @@
-import { db, loadAll, byId } from '../core/store.js';
+import { db, loadAll, byId, enNube } from '../core/store.js';
 import { esc, norm, money, fmtDate, ageText, filterSimilar, debounce, resizeImage, todayISO, addDays, num } from '../core/utils.js';
 import {
   fIn, fSel, fArea, readForm, validateRequired, toast, confirmDialog, openModal,
   badge, avatar, emptyState, ratingHTML, bindRating, pageHead, icon,
 } from '../core/ui.js';
-import { SERVICIOS, servicioDe, criticalTags, debtByOwner, petStats } from '../core/domain.js';
+import { SERVICIOS, servicioDe, criticalTags, debtByOwner, petStats, CANAL_QR } from '../core/domain.js';
 
 export async function render(view, { parts }) {
   if (parts[0]) return renderFicha(view, parts[0]);
   return renderLista(view);
 }
 
-async function renderLista(view) {
-  const { pets, owners, services, sales } = await loadAll('pets', 'owners', 'services', 'sales');
+// q0 y previa solo se usan al refrescar sola la lista: se conserva lo que se estaba buscando y, si ya se cambió de pantalla, no se dibuja
+async function renderLista(view, q0 = '', previa = null) {
+  const { pets, owners, services, sales, interacciones } = await loadAll('pets', 'owners', 'services', 'sales', 'interacciones');
+  if (previa && !previa.isConnected) return;
   const ownerMap = byId(owners);
   const stats = petStats({ pets, services });
   const debts = debtByOwner(sales);
+  // Quien se registró por el QR en la última semana lleva la etiqueta "Nuevo por QR"
+  const nuevosQr = new Set(
+    interacciones.filter((i) => i.canal === CANAL_QR && i.petId && Date.now() - Date.parse(i.fecha) < 7 * 864e5).map((i) => i.petId),
+  );
 
   const seen = new Set();
   const rows = pets
@@ -30,7 +36,7 @@ async function renderLista(view) {
   view.innerHTML = `
     ${pageHead('Clientes', 'Cada fila es una mascota con su propietario, abre una para ver su ficha médica', `<ion-button href="#/registro">Registrar mascota</ion-button>`)}
     <div class="toolbar">
-      <ion-searchbar class="grow" id="q" placeholder="Buscar por nombre de la mascota" debounce="0" autocomplete="off"></ion-searchbar>
+      <ion-searchbar class="grow" id="q" placeholder="Buscar por nombre de la mascota" value="${esc(q0)}" debounce="0" autocomplete="off"></ion-searchbar>
       <span class="muted" id="count"></span>
     </div>
     <div class="panel flush"><div class="table-wrap" id="tbl"></div></div>`;
@@ -54,6 +60,7 @@ async function renderLista(view) {
           const st = stats.get(p.id);
           const d = debts.get(p.ownerId);
           const tags = [
+            nuevosQr.has(p.id) ? badge('Nuevo por QR', 'info') : '',
             ...criticalTags(p, o).map((t) => badge(t, 'bad')),
             d?.vencida ? badge('Deuda vencida', 'warn') : '',
           ].join(' ');
@@ -75,8 +82,24 @@ async function renderLista(view) {
       }),
     );
   };
-  paint('');
-  view.querySelector('#q').addEventListener('ionInput', debounce((e) => paint(e.target.value || ''), 120));
+  let q = q0;
+  paint(q);
+  view.querySelector('#q').addEventListener('ionInput', debounce((e) => paint((q = e.target.value || '')), 120));
+
+  // Con la nube, lo que llega por el QR aparece solo: cada 8 segundos se mira si hay mascotas nuevas
+  if (enNube) {
+    const timer = setInterval(async () => {
+      if (!tbl.isConnected) return clearInterval(timer);
+      if (document.hidden) return;
+      try {
+        const ids = await db.buscar('pets', {}, 'id');
+        if (!tbl.isConnected || ids.length === pets.length) return;
+        clearInterval(timer);
+        if (ids.length > pets.length) toast('Llegó una mascota nueva', 'success');
+        renderLista(view, q, tbl);
+      } catch {} // sin conexión por un momento: se vuelve a intentar en el siguiente ciclo
+    }, 8000);
+  }
 }
 
 async function renderFicha(view, id) {
@@ -214,11 +237,19 @@ async function renderFicha(view, id) {
       confirmText: 'Eliminar',
     });
     if (!ok) return;
-    for (const s of services) await db.remove('services', s.id);
-    await db.remove('pets', pet.id);
-    if (!data.pets.some((p) => p.id !== pet.id && p.ownerId === pet.ownerId)) await db.remove('owners', pet.ownerId);
-    toast(`${pet.nombre} fue eliminada`);
-    location.hash = '#/clientes';
+    try {
+      // Los cobros ya emitidos se conservan: se desvinculan de la mascota, y el propietario se queda si tiene cobros
+      for (const s of data.sales.filter((x) => x.petId === pet.id)) await db.update('sales', s.id, { petId: null });
+      for (const s of services) await db.remove('services', s.id);
+      await db.remove('pets', pet.id);
+      const tieneCobros = data.sales.some((x) => x.ownerId === pet.ownerId);
+      const tieneOtras = data.pets.some((p) => p.id !== pet.id && p.ownerId === pet.ownerId);
+      if (!tieneCobros && !tieneOtras) await db.remove('owners', pet.ownerId);
+      toast(`${pet.nombre} fue eliminada`);
+      location.hash = '#/clientes';
+    } catch (err) {
+      toast('No se pudo eliminar: ' + err.message, 'danger');
+    }
   });
 
   view.querySelector('#add-svc').addEventListener('click', () => openServiceModal({ pet, owner, staff: data.staff, debt, onSaved: again }));

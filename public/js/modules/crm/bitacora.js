@@ -1,10 +1,11 @@
 import { db, loadAll, byId } from '../../core/store.js';
 import { esc, fmtDateTime, filterSimilar, debounce } from '../../core/utils.js';
 import { fSel, fArea, readForm, validateRequired, toast, openModal, badge, emptyState, picker } from '../../core/ui.js';
-import { criticalTags } from '../../core/domain.js';
+import { criticalTags, CANAL_QR } from '../../core/domain.js';
 import { tagsHTML } from './contacto.js';
 
 const CANALES = ['Llamada', 'WhatsApp', 'Correo', 'Visita', 'Nota'];
+const FILTROS = [...CANALES, CANAL_QR]; // "Registro QR" lo anota el sistema, por eso no se puede elegir al registrar a mano
 
 export async function render(root) {
   const data = await loadAll('interacciones', 'pets', 'owners');
@@ -19,7 +20,7 @@ export async function render(root) {
       <ion-searchbar class="grow" id="q" placeholder="Buscar por mascota o propietario" debounce="0" autocomplete="off"></ion-searchbar>
       <ion-select id="canal" interface="popover" aria-label="Canal" fill="outline" value="">
         <ion-select-option value="">Todos los canales</ion-select-option>
-        ${CANALES.map((c) => `<ion-select-option value="${c}">${c}</ion-select-option>`).join('')}
+        ${FILTROS.map((c) => `<ion-select-option value="${c}">${c}</ion-select-option>`).join('')}
       </ion-select>
       <ion-button id="new">Registrar interacción</ion-button>
     </div>
