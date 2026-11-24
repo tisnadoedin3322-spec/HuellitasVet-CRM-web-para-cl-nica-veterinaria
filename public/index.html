@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es" mode="md">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <script>
+    // Sin usuario no se entra a la app: primero se pasa por el login (también al volver atrás tras salir)
+    const sinSesion = () => { try { return !localStorage.getItem('vetara.usuario'); } catch { return false; } };
+    if (sinSesion()) location.replace('/login.html');
+    addEventListener('pageshow', (e) => { if (e.persisted && sinSesion()) location.replace('/login.html'); });
+  </script>
+  <link rel="icon" type="image/png" href="/css/img/iconweb.png">
+  <title>HuellitasVet · Gestión Veterinaria</title>
+
+  <link rel="stylesheet" href="/vendor/ionic-css/ionic.bundle.css">
+  <link rel="preload" href="/fonts/oswald/oswald-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/fonts/oswald/font.css">
+  <link rel="preload" href="/fonts/playwrite-be-vlg/playwrite-be-vlg.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/fonts/playwrite-be-vlg/font.css">
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/modules.css">
+
+  <script type="module" src="/vendor/ionic/ionic.esm.js"></script>
+  <script type="module" src="/js/main.js"></script>
+</head>
+<body>
+  <div id="splash" role="status" aria-label="Cargando">
+    <img src="/css/img/iconweb-256.png" alt="" width="96" height="96">
+    <strong>HuellitasVet</strong>
+    <span class="splash-bar"><i></i></span>
+  </div>
+
+  <ion-app>
+    <ion-split-pane when="lg" content-id="main">
+      <ion-menu content-id="main" menu-id="nav" class="sidebar">
+        <div class="sidebar-body">
+          <div class="brand">
+            <img class="brand-logo" src="/css/img/iconweb-256.png" alt="" width="52" height="52">
+            <div class="brand-text">
+              <span class="brand-name">HuellitasVet</span>
+              <span class="brand-sub">Gestión Veterinaria</span>
+            </div>
+          </div>
+          <nav class="nav" id="nav"></nav>
+          <div class="sidebar-foot">
+            <div class="side-user">
+              <span class="side-user-av" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+              </span>
+              <div><small>Sesión iniciada</small><strong id="user-name"></strong></div>
+            </div>
+            <button type="button" id="logout" class="side-btn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>
+              </svg>
+              <span>Salir</span>
+            </button>
+            <button type="button" id="backup" class="side-btn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>
+              </svg>
+              <span>Respaldo de datos</span>
+            </button>
+            <button type="button" id="reset-demo" class="side-btn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/>
+              </svg>
+              <span>Restablecer datos de ejemplo</span>
+            </button>
+          </div>
+        </div>
+      </ion-menu>
+
+      <div class="ion-page" id="main">
+        <ion-header class="topbar">
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-menu-toggle menu="nav"><ion-button>Menú</ion-button></ion-menu-toggle>
+            </ion-buttons>
+            <ion-title>HuellitasVet</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content id="scroller">
+          <main id="view" class="view"></main>
+        </ion-content>
+      </div>
+    </ion-split-pane>
+  </ion-app>
+</body>
+</html>

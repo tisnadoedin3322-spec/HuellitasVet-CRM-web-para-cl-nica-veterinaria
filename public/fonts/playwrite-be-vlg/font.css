@@ -1,0 +1,9 @@
+/* Playwrite België Vlaanderen (TypeTogether · Google Fonts), licencia SIL OFL 1.1: ver LICENSE.txt
+   Fuente variable, un solo eje de peso (100 a 400). Se usa solo para el nombre de la marca. */
+@font-face {
+  font-family: 'Playwrite BE VLG';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 400;
+  src: url(./playwrite-be-vlg.woff2) format('woff2-variations');
+}

@@ -1,0 +1,79 @@
+:root {
+  --canvas: #ecf0f2;
+  --surface: #ffffff;
+  --ink: #14202b;
+  --ink-soft: #4a5a68;
+  --ink-faint: #75858f;
+  --line: #d3dae0;
+  --line-soft: #e5eaee;
+
+  --petrol: #0f3f4c;
+  --petrol-deep: #0a2c36;
+  --petrol-mid: #1b5666;
+  --petrol-tint: #dce9ec;
+
+  --saffron: #e3a72f;
+  --saffron-deep: #8a5d00;
+  --saffron-tint: #fbefcf;
+
+  --ok: #2e7d5b;
+  --ok-tint: #dcefe5;
+  --danger: #b3362f;
+  --danger-tint: #f6dddb;
+  --info: #2d5da1;
+  --info-tint: #dde7f5;
+
+  --font-body: 'Oswald', 'Arial Narrow', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Oswald', 'Arial Narrow', system-ui, sans-serif;
+  --font-brand: 'Playwrite BE VLG', 'Segoe Script', 'Brush Script MT', cursive; /* solo para el nombre "HuellitasVet" y los títulos de página */
+
+  /* Cursor de patita de perro (SVG de 32 px; el punto de clic está en el dedito de arriba a la izquierda).
+     Oscura para el cursor normal y azafrán sobre lo que se puede pulsar. */
+  --cursor-paw: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20transform%3D%22rotate%28-25%2016%2016%29%22%20fill%3D%22%230f3f4c%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%222.4%22%20stroke-linejoin%3D%22round%22%20paint-order%3D%22stroke%20fill%22%3E%3Cpath%20d%3D%22M16%2014.6c-3.9%200-7.6%203.9-7.6%207.1%200%202.3%201.6%203.3%203.5%203.3%201.5%200%202.5-.8%204.1-.8s2.6.8%204.1.8c1.9%200%203.5-1%203.5-3.3%200-3.2-3.7-7.1-7.6-7.1z%22%2F%3E%3Cellipse%20cx%3D%227.6%22%20cy%3D%2214.2%22%20rx%3D%222.5%22%20ry%3D%223.3%22%20transform%3D%22rotate%28-20%207.6%2014.2%29%22%2F%3E%3Cellipse%20cx%3D%2212.2%22%20cy%3D%228.4%22%20rx%3D%222.7%22%20ry%3D%223.6%22%2F%3E%3Cellipse%20cx%3D%2219.8%22%20cy%3D%228.4%22%20rx%3D%222.7%22%20ry%3D%223.6%22%2F%3E%3Cellipse%20cx%3D%2224.4%22%20cy%3D%2214.2%22%20rx%3D%222.5%22%20ry%3D%223.3%22%20transform%3D%22rotate%2820%2024.4%2014.2%29%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") 9 11, auto;
+  --cursor-paw-click: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20transform%3D%22rotate%28-25%2016%2016%29%22%20fill%3D%22%23e3a72f%22%20stroke%3D%22%230a2c36%22%20stroke-width%3D%221.8%22%20stroke-linejoin%3D%22round%22%20paint-order%3D%22stroke%20fill%22%3E%3Cpath%20d%3D%22M16%2014.6c-3.9%200-7.6%203.9-7.6%207.1%200%202.3%201.6%203.3%203.5%203.3%201.5%200%202.5-.8%204.1-.8s2.6.8%204.1.8c1.9%200%203.5-1%203.5-3.3%200-3.2-3.7-7.1-7.6-7.1z%22%2F%3E%3Cellipse%20cx%3D%227.6%22%20cy%3D%2214.2%22%20rx%3D%222.5%22%20ry%3D%223.3%22%20transform%3D%22rotate%28-20%207.6%2014.2%29%22%2F%3E%3Cellipse%20cx%3D%2212.2%22%20cy%3D%228.4%22%20rx%3D%222.7%22%20ry%3D%223.6%22%2F%3E%3Cellipse%20cx%3D%2219.8%22%20cy%3D%228.4%22%20rx%3D%222.7%22%20ry%3D%223.6%22%2F%3E%3Cellipse%20cx%3D%2224.4%22%20cy%3D%2214.2%22%20rx%3D%222.5%22%20ry%3D%223.3%22%20transform%3D%22rotate%2820%2024.4%2014.2%29%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") 9 11, pointer;
+
+  --radius-s: 6px;
+  --radius-m: 10px;
+  --radius-l: 16px;
+
+  --sidebar-w: 248px;
+
+  --ion-font-family: var(--font-body);
+  --ion-background-color: var(--canvas);
+  --ion-text-color: var(--ink);
+
+  --ion-color-primary: #0f3f4c;
+  --ion-color-primary-rgb: 15, 63, 76;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #0d3843;
+  --ion-color-primary-tint: #27525e;
+
+  --ion-color-secondary: #e3a72f;
+  --ion-color-secondary-rgb: 227, 167, 47;
+  --ion-color-secondary-contrast: #14202b;
+  --ion-color-secondary-contrast-rgb: 20, 32, 43;
+  --ion-color-secondary-shade: #c89329;
+  --ion-color-secondary-tint: #e6b044;
+
+  --ion-color-success: #2e7d5b;
+  --ion-color-success-rgb: 46, 125, 91;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #286e50;
+  --ion-color-success-tint: #438969;
+
+  --ion-color-danger: #b3362f;
+  --ion-color-danger-rgb: 179, 54, 47;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #9e2f29;
+  --ion-color-danger-tint: #bb4a43;
+
+  --ion-color-dark: #14202b;
+  --ion-color-dark-rgb: 20, 32, 43;
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #121c26;
+  --ion-color-dark-tint: #2c3640;
+}

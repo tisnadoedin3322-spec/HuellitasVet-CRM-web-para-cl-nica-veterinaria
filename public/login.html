@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="/css/img/iconweb.png">
+  <title>HuellitasVet · Ingresar</title>
+
+  <link rel="preload" href="/fonts/oswald/oswald-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/fonts/oswald/font.css">
+  <link rel="preload" href="/fonts/playwrite-be-vlg/playwrite-be-vlg.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/fonts/playwrite-be-vlg/font.css">
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+  <main class="login">
+    <img class="login-logo" src="/css/img/iconweb-256.png" alt="HuellitasVet" width="96" height="96">
+    <h1>HuellitasVet</h1>
+    <p class="login-sub">Gestión veterinaria</p>
+
+    <form id="login" novalidate>
+      <label for="usuario">Ingrese su usuario</label>
+      <input id="usuario" name="usuario" type="text" placeholder="Usuario" maxlength="30" data-mask="user"
+             autocomplete="username" autocapitalize="off" spellcheck="false" autofocus>
+      <p id="err" class="login-err" role="alert"></p>
+      <button type="submit">Ingresar</button>
+    </form>
+  </main>
+
+  <script type="module">
+    import '/js/core/ui.js'; // activa el filtro de caracteres (data-mask)
+
+    const form = document.getElementById('login');
+    const input = document.getElementById('usuario');
+    const err = document.getElementById('err');
+
+    input.addEventListener('input', () => {
+      err.textContent = '';
+      input.removeAttribute('aria-invalid');
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const usuario = input.value.trim();
+      if (usuario.length < 3) {
+        err.textContent = 'Ingresa tu usuario (mínimo 3 caracteres)';
+        input.setAttribute('aria-invalid', 'true');
+        return input.focus();
+      }
+      let guardado = false;
+      try {
+        localStorage.setItem('vetara.usuario', usuario);
+        guardado = localStorage.getItem('vetara.usuario') === usuario;
+      } catch {}
+      if (!guardado) {
+        err.textContent = 'El navegador no permite guardar la sesión';
+        return;
+      }
+      location.href = '/';
+    });
+  </script>
+</body>
+</html>
